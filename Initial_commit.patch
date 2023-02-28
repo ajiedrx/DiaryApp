@@ -1,0 +1,269 @@
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle b/app/build.gradle
+--- a/app/build.gradle	(revision 35acf5d1748cd9a5c7fbf1f0e3937d668a07546f)
++++ b/app/build.gradle	(revision 2fc0b005a3b3ea3d6e4596e98b8e84b6115e3e43)
+@@ -39,4 +39,17 @@
+     testImplementation 'junit:junit:4.13.2'
+     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
++
++    implementation "io.insert-koin:koin-android:3.3.2"
++    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
++    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
++    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
++    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
++    implementation 'org.greenrobot:eventbus:3.3.1'
++    implementation 'com.github.bumptech.glide:glide:4.14.2'
++    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
++
++    implementation "androidx.paging:paging-runtime-ktx:3.1.0"
++
++    debugImplementation "com.github.chuckerteam.chucker:library:3.5.2"
+ }
+\ No newline at end of file
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision 35acf5d1748cd9a5c7fbf1f0e3937d668a07546f)
++++ b/app/src/main/AndroidManifest.xml	(revision 2fc0b005a3b3ea3d6e4596e98b8e84b6115e3e43)
+@@ -4,6 +4,7 @@
+     package="com.project.diaryapp">
+ 
+     <application
++        android:name=".App"
+         android:allowBackup="true"
+         android:dataExtractionRules="@xml/data_extraction_rules"
+         android:fullBackupContent="@xml/backup_rules"
+Index: app/src/main/java/com/project/diaryapp/App.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/project/diaryapp/App.kt b/app/src/main/java/com/project/diaryapp/App.kt
+new file mode 100644
+--- /dev/null	(revision 2fc0b005a3b3ea3d6e4596e98b8e84b6115e3e43)
++++ b/app/src/main/java/com/project/diaryapp/App.kt	(revision 2fc0b005a3b3ea3d6e4596e98b8e84b6115e3e43)
+@@ -0,0 +1,22 @@
++package com.project.diaryapp
++
++import android.app.Application
++import com.project.diaryapp.di.networkModule
++import com.project.diaryapp.di.sharedPreferenceModule
++import org.koin.android.ext.koin.androidContext
++import org.koin.android.ext.koin.androidLogger
++import org.koin.core.context.startKoin
++
++class App: Application() {
++    override fun onCreate() {
++        super.onCreate()
++        startKoin {
++            androidLogger()
++            androidContext(this@App)
++            modules(
++                sharedPreferenceModule,
++                networkModule
++            )
++        }
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/com/project/diaryapp/Const.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/project/diaryapp/Const.kt b/app/src/main/java/com/project/diaryapp/Const.kt
+new file mode 100644
+--- /dev/null	(revision 2fc0b005a3b3ea3d6e4596e98b8e84b6115e3e43)
++++ b/app/src/main/java/com/project/diaryapp/Const.kt	(revision 2fc0b005a3b3ea3d6e4596e98b8e84b6115e3e43)
+@@ -0,0 +1,7 @@
++package com.project.diaryapp
++
++object Const {
++    const val USER_LOGIN_INFO = "userLogin"
++    const val PREFERENCE_NAME = "diaryAppPreference"
++    const val LAST_ACTIVITY = "LAST_ACTIVITY"
++}
+\ No newline at end of file
+Index: app/src/main/java/com/project/diaryapp/data/lib/ApiService.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/project/diaryapp/data/lib/ApiService.kt b/app/src/main/java/com/project/diaryapp/data/lib/ApiService.kt
+new file mode 100644
+--- /dev/null	(revision 2fc0b005a3b3ea3d6e4596e98b8e84b6115e3e43)
++++ b/app/src/main/java/com/project/diaryapp/data/lib/ApiService.kt	(revision 2fc0b005a3b3ea3d6e4596e98b8e84b6115e3e43)
+@@ -0,0 +1,12 @@
++package com.project.diaryapp.data.lib
++
++import retrofit2.Retrofit
++
++object ApiService {
++    fun <T> createReactiveService(
++        serviceClass: Class<T>,
++        retrofitClient: Retrofit
++    ): T {
++        return retrofitClient.create(serviceClass)
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/com/project/diaryapp/data/lib/HeaderInterceptor.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/project/diaryapp/data/lib/HeaderInterceptor.kt b/app/src/main/java/com/project/diaryapp/data/lib/HeaderInterceptor.kt
+new file mode 100644
+--- /dev/null	(revision 2fc0b005a3b3ea3d6e4596e98b8e84b6115e3e43)
++++ b/app/src/main/java/com/project/diaryapp/data/lib/HeaderInterceptor.kt	(revision 2fc0b005a3b3ea3d6e4596e98b8e84b6115e3e43)
+@@ -0,0 +1,44 @@
++package com.project.diaryapp.data.lib
++
++import android.content.SharedPreferences
++import com.project.diaryapp.Const
++import okhttp3.Interceptor
++import okhttp3.Request
++import okhttp3.Response
++import java.io.IOException
++
++class HeaderInterceptor(
++    private val headers: HashMap<String, String>,
++    private val sharedPreferences: SharedPreferences,
++) : Interceptor {
++
++    @Throws(IOException::class)
++    override fun intercept(chain: Interceptor.Chain): Response {
++        val request = mapHeaders(chain)
++        return chain.proceed(request)
++    }
++
++    private fun mapAccessToken() {
++        if(sharedPreferences.contains(Const.USER_LOGIN_INFO)){
++//            val peekAuthToken = Gson().fromJson(sharedPreferences.getString(Const.USER_LOGIN_INFO, ""), Login::class.java).token
++//            headers["Authorization"] = "Bearer $peekAuthToken"
++        }
++    }
++
++    private fun mapHeaders(chain: Interceptor.Chain): Request {
++        var original = chain.request()
++        val authorizationHeadersMap = original.headers().values("Authorization")
++
++        if (authorizationHeadersMap.any()) {
++            original = original.newBuilder().removeHeader("Authorization").build()
++            mapAccessToken()
++        }
++
++        val requestBuilder = original.newBuilder()
++        for ((key, value) in headers) {
++            requestBuilder.addHeader(key, value)
++        }
++        headers.clear()
++        return requestBuilder.build()
++    }
++}
+Index: app/src/main/java/com/project/diaryapp/data/lib/UnauthorizedAccessEvent.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/project/diaryapp/data/lib/UnauthorizedAccessEvent.kt b/app/src/main/java/com/project/diaryapp/data/lib/UnauthorizedAccessEvent.kt
+new file mode 100644
+--- /dev/null	(revision 2fc0b005a3b3ea3d6e4596e98b8e84b6115e3e43)
++++ b/app/src/main/java/com/project/diaryapp/data/lib/UnauthorizedAccessEvent.kt	(revision 2fc0b005a3b3ea3d6e4596e98b8e84b6115e3e43)
+@@ -0,0 +1,4 @@
++package com.project.diaryapp.data.lib
++
++class UnauthorizedAccessEvent {
++}
+\ No newline at end of file
+Index: app/src/main/java/com/project/diaryapp/di/AppModules.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/project/diaryapp/di/AppModules.kt b/app/src/main/java/com/project/diaryapp/di/AppModules.kt
+new file mode 100644
+--- /dev/null	(revision 2fc0b005a3b3ea3d6e4596e98b8e84b6115e3e43)
++++ b/app/src/main/java/com/project/diaryapp/di/AppModules.kt	(revision 2fc0b005a3b3ea3d6e4596e98b8e84b6115e3e43)
+@@ -0,0 +1,73 @@
++package com.project.diaryapp.di
++
++import android.app.Application
++import android.content.Context
++import android.content.SharedPreferences
++import com.chuckerteam.chucker.api.ChuckerCollector
++import com.chuckerteam.chucker.api.ChuckerInterceptor
++import com.project.diaryapp.Const
++import com.project.diaryapp.data.lib.HeaderInterceptor
++import okhttp3.Interceptor
++import okhttp3.OkHttpClient
++import org.koin.android.ext.koin.androidApplication
++import org.koin.dsl.module
++import retrofit2.Retrofit
++import retrofit2.converter.gson.GsonConverterFactory
++
++private const val baseUrl = "https://diary-test.ifdenewhallaid.com/"
++
++val networkModule = module {
++    single {
++        val okHttpClient = OkHttpClient.Builder()
++            .addInterceptor(getHeaderInterceptor(get()))
++            .addInterceptor(
++                ChuckerInterceptor.Builder(get())
++                .collector(ChuckerCollector(get()))
++                .maxContentLength(250000L)
++                .redactHeaders(emptySet())
++                .alwaysReadResponseBody(false)
++                .build())
++            .build()
++
++        val client = Retrofit.Builder()
++            .baseUrl(baseUrl)
++            .client(okHttpClient)
++            .addConverterFactory(GsonConverterFactory.create())
++            .build()
++        client
++    }
++}
++
++private fun getHeaderInterceptor(sharedPreferences: SharedPreferences): Interceptor {
++    val headers = HashMap<String, String>()
++    return HeaderInterceptor(headers, sharedPreferences)
++}
++
++val sharedPreferenceModule = module {
++    single {
++        getSharedPrefs(androidApplication())
++    }
++    single<SharedPreferences.Editor> {
++        getSharedPrefs(androidApplication()).edit()
++    }
++}
++
++fun getSharedPrefs(androidApplication: Application): SharedPreferences{
++    return androidApplication.getSharedPreferences(Const.PREFERENCE_NAME,  Context.MODE_PRIVATE)
++}
++
++//val authModule = module {
++//    single { ApiService.createReactiveService(AuthApiService::class.java, get()) }
++//    single<AuthRepository> { AuthDataStore(get()) }
++//    single<AuthUseCase> { AuthInteractor(get(), get()) }
++//    viewModel { AuthViewModel(get()) }
++//}
++//
++//val storyModule = module {
++//    single { ApiService.createReactiveService(StoryApiService::class.java, get()) }
++//    single<StoryRepository> { StoryDataStore(get()) }
++//    single<StoryUseCase> { StoryInteractor(get()) }
++//    viewModel { StoryViewModel(get()) }
++//}
++
++
