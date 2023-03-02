@@ -1,6 +1,8 @@
 package com.project.diaryapp
 
 import android.app.Application
+import com.project.diaryapp.di.authModule
+import com.project.diaryapp.di.diaryModule
 import com.project.diaryapp.di.networkModule
 import com.project.diaryapp.di.sharedPreferenceModule
 import org.koin.android.ext.koin.androidContext
@@ -15,7 +17,9 @@ class App: Application() {
             androidContext(this@App)
             modules(
                 sharedPreferenceModule,
-                networkModule
+                networkModule,
+                authModule,
+                diaryModule
             )
         }
     }

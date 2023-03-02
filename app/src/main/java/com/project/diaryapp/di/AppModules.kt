@@ -6,10 +6,20 @@ import android.content.SharedPreferences
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.project.diaryapp.Const
+import com.project.diaryapp.data.auth.AuthApiService
+import com.project.diaryapp.data.auth.AuthDataStore
+import com.project.diaryapp.data.auth.AuthRepository
+import com.project.diaryapp.data.diary.DiaryApiService
+import com.project.diaryapp.data.diary.DiaryDataStore
+import com.project.diaryapp.data.diary.DiaryRepository
+import com.project.diaryapp.data.lib.ApiService
 import com.project.diaryapp.data.lib.HeaderInterceptor
+import com.project.diaryapp.presentation.auth.AuthViewModel
+import com.project.diaryapp.presentation.diary.DiaryViewModel
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidApplication
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -56,18 +66,16 @@ fun getSharedPrefs(androidApplication: Application): SharedPreferences{
     return androidApplication.getSharedPreferences(Const.PREFERENCE_NAME,  Context.MODE_PRIVATE)
 }
 
-//val authModule = module {
-//    single { ApiService.createReactiveService(AuthApiService::class.java, get()) }
-//    single<AuthRepository> { AuthDataStore(get()) }
-//    single<AuthUseCase> { AuthInteractor(get(), get()) }
-//    viewModel { AuthViewModel(get()) }
-//}
-//
-//val storyModule = module {
-//    single { ApiService.createReactiveService(StoryApiService::class.java, get()) }
-//    single<StoryRepository> { StoryDataStore(get()) }
-//    single<StoryUseCase> { StoryInteractor(get()) }
-//    viewModel { StoryViewModel(get()) }
-//}
+val authModule = module {
+    single { ApiService.createReactiveService(AuthApiService::class.java, get()) }
+    single<AuthRepository> { AuthDataStore(get(), get()) }
+    viewModel { AuthViewModel(get()) }
+}
+
+val diaryModule = module {
+    single { ApiService.createReactiveService(DiaryApiService::class.java, get()) }
+    single<DiaryRepository> { DiaryDataStore(get()) }
+    viewModel { DiaryViewModel(get()) }
+}
 
 

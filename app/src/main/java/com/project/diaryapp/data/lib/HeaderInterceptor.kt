@@ -19,16 +19,19 @@ class HeaderInterceptor(
     }
 
     private fun mapAccessToken() {
-        if(sharedPreferences.contains(Const.USER_LOGIN_INFO)){
-//            val peekAuthToken = Gson().fromJson(sharedPreferences.getString(Const.USER_LOGIN_INFO, ""), Login::class.java).token
-//            headers["Authorization"] = "Bearer $peekAuthToken"
+        if(sharedPreferences.contains(Const.USER_TOKEN)){
+            val peekAuthToken = sharedPreferences.getString(Const.USER_TOKEN, "")
+            headers["Authorization"] = "Bearer $peekAuthToken"
         }
     }
 
     private fun mapHeaders(chain: Interceptor.Chain): Request {
         var original = chain.request()
-        val authorizationHeadersMap = original.headers().values("Authorization")
+        //Defaul headers
+        headers["Content-Type"] = "application/json"
+        headers["Accept"] = "application/json"
 
+        val authorizationHeadersMap = original.headers().values("Authorization")
         if (authorizationHeadersMap.any()) {
             original = original.newBuilder().removeHeader("Authorization").build()
             mapAccessToken()
