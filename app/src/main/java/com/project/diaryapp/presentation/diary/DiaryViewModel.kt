@@ -143,4 +143,8 @@ class DiaryViewModel(private val diaryRepository: DiaryRepository): ViewModel() 
     fun refreshTrigger(){
         _isDiaryListNeedRefresh.value = !_isDiaryListNeedRefresh.value
     }
+
+    fun clearDiaryDatabase(){
+        diaryRepository.clearDiaryDatabase()
+    }
 }

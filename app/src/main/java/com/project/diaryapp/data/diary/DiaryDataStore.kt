@@ -77,4 +77,8 @@ class DiaryDataStore(private val diaryApiService: DiaryApiService, private val d
             emit(diaryDao.getAll())
         }
     }
+
+    override fun clearDiaryDatabase() {
+        diaryDao.deleteAll()
+    }
 }

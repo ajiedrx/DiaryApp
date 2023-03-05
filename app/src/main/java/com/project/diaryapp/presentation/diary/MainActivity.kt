@@ -13,6 +13,7 @@ import com.project.diaryapp.databinding.ActivityMainBinding
 import com.project.diaryapp.presentation.BaseActivity
 import com.project.diaryapp.presentation.auth.LoginActivity
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity() {
 
@@ -21,6 +22,8 @@ class MainActivity : BaseActivity() {
 
     private val sharedPreferences: SharedPreferences by inject()
     private val sharedPreferencesEditor: SharedPreferences.Editor by inject()
+
+    private val diaryViewModel: DiaryViewModel by viewModel()
 
     private val navHostFragment: NavHostFragment by lazy {
         supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -47,6 +50,7 @@ class MainActivity : BaseActivity() {
 
         binding.btnLogout.setOnClickListener {
             sharedPreferencesEditor.clear().apply()
+            diaryViewModel.clearDiaryDatabase()
             finish()
             LoginActivity.start(this)
         }

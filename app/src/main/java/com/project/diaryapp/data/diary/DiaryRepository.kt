@@ -14,4 +14,5 @@ interface DiaryRepository {
     fun archiveDiary(diary: DiaryEntity): Flow<DiaryResponse>
     fun unarchiveDiary(diaryID: String): Flow<DiaryResponse>
     fun getArchivedDiary(): Flow<List<DiaryEntity>>
+    fun clearDiaryDatabase(): Unit
 }

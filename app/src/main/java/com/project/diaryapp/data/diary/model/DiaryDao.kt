@@ -21,6 +21,9 @@ interface DiaryDao {
     @Query("DELETE FROM DiaryEntity WHERE id = :id")
     fun delete(id: String)
 
+    @Query("DELETE FROM DiaryEntity")
+    fun deleteAll()
+
     @Update
     fun update(data: DiaryEntity) : Int
 }
