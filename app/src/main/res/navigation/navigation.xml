@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/dashboardFragment">
+    <fragment
+        android:id="@+id/archivedFragment"
+        android:name="com.project.diaryapp.presentation.diary.ArchivedFragment"
+        android:label="fragment_archived"
+        tools:layout="@layout/fragment_archived" >
+        <action
+            android:id="@+id/action_archivedFragment_to_detailDiaryFragment"
+            app:destination="@id/detailDiaryFragment"
+            app:enterAnim="@anim/slide_enter_from_left"
+            app:exitAnim="@anim/slide_exit_from_right"
+            app:popEnterAnim="@anim/slide_enter_from_left"
+            app:popExitAnim="@anim/slide_exit_from_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.project.diaryapp.presentation.diary.DashboardFragment"
+        android:label="fragment_dashboard"
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_dashboardFragment_to_detailDiaryFragment"
+            app:destination="@id/detailDiaryFragment"
+            app:enterAnim="@anim/slide_enter_from_left"
+            app:exitAnim="@anim/slide_exit_from_right"
+            app:popEnterAnim="@anim/slide_enter_from_left"
+            app:popExitAnim="@anim/slide_exit_from_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/detailDiaryFragment"
+        android:name="com.project.diaryapp.presentation.diary.DetailDiaryFragment"
+        android:label="fragment_detail_diary"
+        tools:layout="@layout/fragment_detail_diary" />
+</navigation>

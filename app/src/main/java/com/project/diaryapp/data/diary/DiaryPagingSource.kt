@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.project.diaryapp.data.diary.model.response.DiaryResponse
 
-class DiaryPagingSource(private val apiService: DiaryApiService):
+class DiaryPagingSource(private val apiService: DiaryApiService, private val searchParam: String?):
     PagingSource<Int, DiaryResponse>() {
 
     private companion object {
@@ -21,10 +21,15 @@ class DiaryPagingSource(private val apiService: DiaryApiService):
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, DiaryResponse> {
         return try {
             val page = params.key ?: INITIAL_PAGE_INDEX
-            val responseData = apiService.getDiaryList(page)
+            val responseData = apiService.getDiaryList(page, searchParam)
+
+            val diaryData = if(searchParam.isNullOrEmpty())
+                responseData.body()?.data?.map { it }.orEmpty()
+            else
+                responseData.body()?.data?.filter { it.title.orEmpty().contains(searchParam, true) }.orEmpty()
 
             LoadResult.Page(
-                data = responseData.body()?.data?.map { it }.orEmpty(),
+                data = diaryData,
                 prevKey = if (page == 1) null else page - 1,
                 nextKey = if (responseData.body()?.data.isNullOrEmpty()) null else page + 1
             )

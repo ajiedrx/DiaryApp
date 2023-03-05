@@ -21,6 +21,7 @@ class AuthDataStore(private val authApiService: AuthApiService, private val shar
         return flow {
             val response = authApiService.login(request).handleApiError()
             sharedPreferences.putString(Const.USER_TOKEN, response.accessToken).apply()
+            sharedPreferences.putString(Const.USER_NAME, response.user?.username).apply()
             emit(response)
         }
     }

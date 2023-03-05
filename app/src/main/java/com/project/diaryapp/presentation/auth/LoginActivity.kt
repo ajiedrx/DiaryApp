@@ -2,16 +2,20 @@ package com.project.diaryapp.presentation.auth
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import com.project.diaryapp.Const
 import com.project.diaryapp.R
 import com.project.diaryapp.base.Result
 import com.project.diaryapp.databinding.ActivityLoginBinding
+import com.project.diaryapp.presentation.diary.MainActivity
 import com.project.diaryapp.showSnackbar
 import com.project.diaryapp.validateAlphanumeric
 import com.project.diaryapp.validateEmail
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : AppCompatActivity() {
@@ -19,12 +23,13 @@ class LoginActivity : AppCompatActivity() {
     private val binding by lazy { _binding!! }
 
     private val authViewModel: AuthViewModel by viewModel()
+    private val sharedPreferences: SharedPreferences by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        isLogin()
         initObservers()
         initAction()
     }
@@ -67,8 +72,9 @@ class LoginActivity : AppCompatActivity() {
                 }
                 is Result.Success -> {
                     setIsLoadingState(false)
-                    binding.root.showSnackbar(getString(R.string.message_register_success))
-                    //Redirect to dashboard page TODO
+                    binding.root.showSnackbar(getString(R.string.message_login_success))
+                    finish()
+                    MainActivity.start(this)
                 }
                 is Result.Error -> {
                     setIsLoadingState(false)
@@ -94,6 +100,13 @@ class LoginActivity : AppCompatActivity() {
     private fun setIsLoadingState(isLoading: Boolean){
         binding.btnLogin.visibility = if(isLoading) View.INVISIBLE else View.VISIBLE
         binding.progressCircular.visibility = if(isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun isLogin(){
+        if(!sharedPreferences.getString(Const.USER_TOKEN, "").isNullOrEmpty()){
+            finish()
+            MainActivity.start(this)
+        }
     }
 
     companion object{

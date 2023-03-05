@@ -19,15 +19,15 @@ interface DiaryApiService {
 
     @GET("/diary")
     @Headers("Authorization:need")
-    suspend fun getDiaryList(@Query("page") page: Int): Response<ListDiaryResponse>
+    suspend fun getDiaryList(@Query("page") page: Int, @Query("search") searchParam: String?): Response<ListDiaryResponse>
 
     @GET("/diary")
     @Headers("Authorization:need")
     suspend fun getDiary(@Query("diary_id") diaryID: String): Response<DiaryResponse>
 
-    @PUT("/diary")
+    @PUT("/diary/{diary_id}")
     @Headers("Authorization:need")
-    suspend fun updateDiary(@Query("diary_id") diaryID: String, @Body request: InsertUpdateDiaryRequest): Response<DiaryResponse>
+    suspend fun updateDiary(@Path("diary_id") diaryID: String, @Body request: InsertUpdateDiaryRequest): Response<DiaryResponse>
 
     @PUT("/diary/{diary_id}/archieve")
     @Headers("Authorization:need")

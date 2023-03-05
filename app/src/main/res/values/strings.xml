@@ -16,4 +16,26 @@
     <string name="message_login_success">Login success</string>
     <string name="message_unknown_error">Unknown error occurred</string>
     <string name="caption_login">Login</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_archive">Archived</string>
+    <string name="title_diary_detail">Diary Detail</string>
+    <string name="caption_diary_content">Diary content</string>
+    <string name="action_save">save</string>
+    <string name="caption_diary">Diary</string>
+    <string name="caption_retry">Retry</string>
+    <string name="caption_loading">Loading</string>
+    <string name="action_search">Search</string>
+    <string name="format_timestamp_created">Created at %s</string>
+    <string name="format_timestamp_updated">Updated at %s</string>
+    <string name="message_update_diary_success">Diary update successful</string>
+    <string name="message_create_diary_success">Diary create successful</string>
+    <string name="hint_title">Title</string>
+    <string name="message_archive_diary_success">Diary archive success</string>
+    <string name="message_unarchive_diary_success">Diary unarchive success</string>
+    <string name="caption_archived_diary">Archived Diary</string>
+    <string name="format_username">Hello, %s</string>
 </resources>

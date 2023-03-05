@@ -9,6 +9,7 @@ import com.project.diaryapp.Const
 import com.project.diaryapp.data.auth.AuthApiService
 import com.project.diaryapp.data.auth.AuthDataStore
 import com.project.diaryapp.data.auth.AuthRepository
+import com.project.diaryapp.data.diary.AppDatabase
 import com.project.diaryapp.data.diary.DiaryApiService
 import com.project.diaryapp.data.diary.DiaryDataStore
 import com.project.diaryapp.data.diary.DiaryRepository
@@ -62,6 +63,10 @@ val sharedPreferenceModule = module {
     }
 }
 
+val databaseModule = module {
+    single { AppDatabase.getDatabase(get()).getDiaryDao() }
+}
+
 fun getSharedPrefs(androidApplication: Application): SharedPreferences{
     return androidApplication.getSharedPreferences(Const.PREFERENCE_NAME,  Context.MODE_PRIVATE)
 }
@@ -74,7 +79,7 @@ val authModule = module {
 
 val diaryModule = module {
     single { ApiService.createReactiveService(DiaryApiService::class.java, get()) }
-    single<DiaryRepository> { DiaryDataStore(get()) }
+    single<DiaryRepository> { DiaryDataStore(get(), get()) }
     viewModel { DiaryViewModel(get()) }
 }
 
